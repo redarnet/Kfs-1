@@ -105,11 +105,20 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
+// scroll a tester 
+// void vga_scroll(void) {
+//     for (int row = 1; row < HEIGHT; ++row)
+//         for (int col = 0; col < WIDTH; ++col)
+//             VGA_BUF[(row-1) * WIDTH + col] = VGA_BUF[row * WIDTH + col];
+//     // clear last line
+//     uint16_t blank = ((uint16_t)attr << 8) | ' ';
+//     for (int col = 0; col < WIDTH; ++col)
+//         VGA_BUF[(HEIGHT-1) * WIDTH + col] = blank;
+// }
 void kernel_main(void) 
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
-
 	/* Newline support is left as an exercise. */
 	terminal_writestring("42");
 }
