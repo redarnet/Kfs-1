@@ -1,6 +1,5 @@
 iso : debian-13.1.0-amd64-netinst.iso
 
-
 ```
 su -
 usermod -aG sudo vboxuser
@@ -27,14 +26,12 @@ cp  setup-toolchain.sh $HOME/src
 ️ Ferme et rouvre ton terminal 
 Test : i386-elf-gcc --version
 
-Dans src
+Dans src du projet
 ```
 i386-elf-as boot.s -o boot.o
 i386-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding
 i386-elf-ld -T linker.ld -o kernel.bin boot.o kernel.o
 ```
-
-
 
 
 ```
