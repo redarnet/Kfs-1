@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-
 # Build script for kernel ISO and optional QEMU run
-# Run this from /vagrant (project root)
-
 
 PROJECT_DIR="/vagrant"
 cd "$PROJECT_DIR"
