@@ -5,7 +5,6 @@ set -euo pipefail
 # Provision script for KFS1
 # Run as vagrant user by default
 
-
 echo "==> Provision: update & install packages"
 sudo apt-get update -y
 sudo apt-get upgrade -y
@@ -41,22 +40,8 @@ echo "==> Warning: /vagrant/setup-toolchain.sh not found — skip"
 fi
 
 
-# Add typical toolchain bin path to .profile if the toolchain installs to /usr/local or $HOME/.local
-# We avoid forcing a path — adjust if your setup-toolchain.sh prints where i386-elf-gcc is installed.
-
-
-cat <<'EOF' >> "$HOME/.profile"
-# KFS1 toolchain path (example)
-export PATH="$HOME/src/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-EOF
-
-# Ajouter le chemin du compilateur croisé au PATH de l'utilisateur vagrant
-CROSS_PATH="/root/opt/cross/bin"
-PROFILE_FILE="/home/vagrant/.bashrc"
-
-if ! grep -q "$CROSS_PATH" "$PROFILE_FILE"; then
-    echo "export PATH=$CROSS_PATH:\$PATH" >> "$PROFILE_FILE"
-fi
+chmod 777 root
+sudo ln -sf /root/opt/cross/bin/i386-elf-gcc /usr/local/bin/i386-elf-gcc
 
 
 

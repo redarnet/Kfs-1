@@ -3,18 +3,14 @@ CC = $(CROSS)-gcc
 AS = $(CROSS)-as
 LD = $(CROSS)-ld
 
-CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra \
+         -fno-builtin -fno-exceptions -fno-stack-protector -fno-rtti \
+         -nostdlib -nodefaultlibs
 LDFLAGS = -T src/linker.ld -nostdlib
-# faut les flags : -fno-builtin
-# • -fno-exception
-# • -fno-stack-protector
-# • -fno-rtti
-# • -nostdlib
-# • -nodefaultlibs
 
 ISO_DIR = iso
 KERNEL_BIN = kernel.bin
-ISO = mon_os.iso
+ISO = kernel.iso
 
 all: $(ISO)
 
@@ -37,7 +33,7 @@ run: $(ISO)
 	qemu-system-i386 -cdrom $(ISO)
 
 clean:
-	rm -f src/*.o $(KERNEL_BIN) $(ISO)
+	rm -f src/*.o $(KERNEL_BIN) $(ISO) -rf $(ISO_DIR)
 
 re: clean all
 
