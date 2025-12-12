@@ -13,6 +13,4 @@ echo "Error: i386-elf-gcc not found in PATH. Ensure setup-toolchain.sh installed
 exit 1
 fi
 
-
 echo "==> Assembling and compiling"
-make

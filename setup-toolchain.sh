@@ -35,7 +35,12 @@ make all-gcc -j$(nproc)
 make install-gcc
 cd ..
 
-echo "export PATH=\"$PREFIX/bin:\$PATH\"" >> ~/.bashrc
+
+sudo chmod 777 /root
+
+echo 'export PATH=/root/opt/cross/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
 
 echo "✅ Le compilateur croisé est installé."
 echo "➡️ Ferme et rouvre ton terminal ou fais : source ~/.bashrc"
