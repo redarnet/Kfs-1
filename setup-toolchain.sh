@@ -35,13 +35,14 @@ make all-gcc -j$(nproc)
 make install-gcc
 cd ..
 
-
 sudo chmod 777 /root
 
 echo 'export PATH=/root/opt/cross/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
 
 
+
 echo "✅ Le compilateur croisé est installé."
 echo "➡️ Ferme et rouvre ton terminal ou fais : source ~/.bashrc"
 echo "➡️ Test : i386-elf-gcc --version"
+echo "Comande qemu : qemu-system-i386 -cdrom kernel.iso"

@@ -84,15 +84,28 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(char c) 
+void terminal_putchar(char c)
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
-		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
-	}
+    if (c == '\n') {
+        terminal_column = 0;
+        terminal_row++;
+    } else {
+        terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+        terminal_column++;
+    }
+
+    if (terminal_column >= VGA_WIDTH) {
+        terminal_column = 0;
+        terminal_row++;
+    }
+
+    if (terminal_row >= VGA_HEIGHT) {
+        vga_scroll();
+        terminal_row = VGA_HEIGHT - 1;
+    }
 }
+
+
 
 void terminal_write(const char* data, size_t size) 
 {
@@ -106,19 +119,27 @@ void terminal_writestring(const char* data)
 }
 
 // scroll a tester 
-// void vga_scroll(void) {
-//     for (int row = 1; row < HEIGHT; ++row)
-//         for (int col = 0; col < WIDTH; ++col)
-//             VGA_BUF[(row-1) * WIDTH + col] = VGA_BUF[row * WIDTH + col];
-//     // clear last line
-//     uint16_t blank = ((uint16_t)attr << 8) | ' ';
-//     for (int col = 0; col < WIDTH; ++col)
-//         VGA_BUF[(HEIGHT-1) * WIDTH + col] = blank;
-// }
+void vga_scroll(void) {
+    for (int row = 1; row < VGA_HEIGHT; ++row)
+        for (int col = 0; col < VGA_WIDTH; ++col)
+            terminal_buffer[(row-1) * VGA_WIDTH + col] =
+					terminal_buffer[row * VGA_WIDTH + col];
+    // clear last line
+	uint16_t blank = vga_entry(' ', terminal_color);
+    for (int col = 0; col < VGA_WIDTH; ++col)
+        terminal_buffer[(VGA_HEIGHT-1) * VGA_WIDTH + col] = blank;
+}
+
 void kernel_main(void) 
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
 	/* Newline support is left as an exercise. */
 	terminal_writestring("42");
+	for (int i = 0; i < 30; i++)
+	{
+		if (i % 3  == 0)
+    		terminal_writestring("Hello 42\n");
+	}
+
 }
