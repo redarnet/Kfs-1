@@ -1,43 +1,20 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -e
 
-# Provision script for KFS1
+echo "==> Update system"
+apt-get update -y
+apt-get upgrade -y
 
-echo "==> Provision: update & install packages"
-sudo apt-get update -y
-sudo apt-get upgrade -y
+echo "==> Install packages"
+apt-get install -y \
+  build-essential nasm grub-pc-bin xorriso qemu-system-x86 \
+  bison flex libgmp3-dev libmpfr-dev libmpc-dev texinfo
 
+echo "==> Run cross-toolchain build as vagrant user"
+sudo -u vagrant bash /vagrant/download.sh
 
-sudo apt-get install -y \
-build-essential nasm grub-pc-bin xorriso qemu-system-x86 make \
-bison flex libgmp3-dev libmpfr-dev libmpc-dev texinfo
+echo "==> Add cross-compiler to PATH (vagrant)"
+echo 'export PATH="$HOME/opt/cross/bin:$PATH"' >> /home/vagrant/.bashrc
+chown vagrant:vagrant /home/vagrant/.bashrc
 
-
-mkdir -p "$HOME/src"
-
-if [ -f /vagrant/download.sh ]; then
-echo "==> Running /vagrant/download.sh"
-chmod +x /vagrant/download.sh
-/vagrant/download.sh
-else
-echo "==> Warning: /vagrant/download.sh not found — skip"
-fi
-
-
-if [ -f /vagrant/setup-toolchain.sh ]; then
-echo "==> Running /vagrant/setup-toolchain.sh"
-chmod +x /vagrant/setup-toolchain.sh
-cp /vagrant/setup-toolchain.sh "$HOME/src/"
-bash "$HOME/src/setup-toolchain.sh"
-echo "==> Toolchain script executed"
-else
-echo "==> Warning: /vagrant/setup-toolchain.sh not found — skip"
-fi
-
-
-sudo chmod 777 /root
-echo 'export PATH=/root/opt/cross/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
-
-
-echo "==> Provisioning complete. Close and reopen the shell (or 'vagrant ssh') to get PATH changes."
+echo "==> Provisioning complete"

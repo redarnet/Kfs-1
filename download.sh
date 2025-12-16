@@ -1,46 +1,53 @@
-#!/bin/bash
-#set -e
+#!/usr/bin/env bash
+set -e
 
-# PREPARATION
+BINUTILS_VERSION=2.45
+GCC_VERSION=15.2.0
 
-#echo "building cross compiler..."
-#sleep 2
-export PREFIX="$HOME/opt/cross"
-export TARGET=i386-elf
+PREFIX="$HOME/opt/cross"
+TARGET=i386-elf
+
 export PATH="$PREFIX/bin:$PATH"
-mkdir -p $HOME/src
-cd $HOME/src
 
-## Download and extract binutils and gcc (replace x.y.z with the actual versions)
+mkdir -p "$HOME/src"
+cd "$HOME/src"
 
-# Function to get the latest version of a tool
-get_latest_version() {
-  local tool=$1
-  local url=$2
-  local pattern=$3
+# BINUTILS
+if [ ! -d "binutils-$BINUTILS_VERSION" ]; then
+  wget https://ftp.gnu.org/gnu/binutils/binutils-$BINUTILS_VERSION.tar.gz
+  tar -xzf binutils-$BINUTILS_VERSION.tar.gz
+fi
 
-  # Download the directory listing
-  wget -qO- $url | grep -oP "$pattern" | sort -V | tail -n1
-}
+mkdir -p build-binutils
+cd build-binutils
+../binutils-$BINUTILS_VERSION/configure \
+  --target=$TARGET \
+  --prefix=$PREFIX \
+  --disable-nls \
+  --disable-werror
 
-# Get the latest version of binutils
-BINUTILS_LATEST_VERSION=$(get_latest_version "binutils" "http://ftp.gnu.org/gnu/binutils/" "binutils-[0-9]+\.[0-9]+")
-BINUTILS_LATEST_TAR=$(get_latest_version "binutils" "http://ftp.gnu.org/gnu/binutils/" "binutils-[0-9]+\.[0-9]+\.tar\.gz")
-BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/$BINUTILS_LATEST_TAR"
+make -j$(nproc)
+make install
+cd ..
 
-# Get the latest version of gcc
-GCC_LATEST_VERSION=$(get_latest_version "gcc" "http://ftp.gnu.org/gnu/gcc/" "gcc-[0-9]+\.[0-9]+\.[0-9]+")
-GCC_LATEST="http://ftp.gnu.org/gnu/gcc/$GCC_LATEST_VERSION"
-GCC_LATEST_TAR=$(get_latest_version "gcc" "$GCC_LATEST" "gcc-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz")
-GCC_URL=$GCC_LATEST/$GCC_LATEST_TAR
+# GCC
+if [ ! -d "gcc-$GCC_VERSION" ]; then
+  wget https://ftp.gnu.org/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.gz
+  tar -xzf gcc-$GCC_VERSION.tar.gz
+fi
 
-# Download and extract binutils and gcc
-wget $BINUTILS_URL
-tar -xzf $BINUTILS_LATEST_TAR
-rm $BINUTILS_LATEST_TAR
-mv $BINUTILS_LATEST_VERSION binutils
+mkdir -p build-gcc
+cd build-gcc
+../gcc-$GCC_VERSION/configure \
+  --target=$TARGET \
+  --prefix=$PREFIX \
+  --disable-nls \
+  --enable-languages=c \
+  --without-headers
 
-wget $GCC_URL
-tar -xzf $GCC_LATEST_TAR
-rm $GCC_LATEST_TAR
-mv $GCC_LATEST_VERSION gcc
+make all-gcc -j$(nproc)
+make install-gcc
+
+
+#  latest version binutils :  binutils-2.45.tar.gz
+#latest version gcc        : gcc-15.2.0.tar.gz

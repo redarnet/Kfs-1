@@ -1,15 +1,9 @@
 # Vagrantfile for KFS1 (Debian 13 / bookworm)
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/debian-12"
-  config.vm.box_version = "202407.22.0"
+  # config.vm.box_version = "202407.22.0"
   config.vm.hostname = "Kfs-1"
   config.vm.network "private_network", ip: "192.168.56.110"
-  config.vm.provider "virtualbox" do |vb|
-    vb.gui = true
-    vb.name = "p3"
-    vb.memory = "4096"
-    vb.cpus = 4
-  end
 
 # Resources
 config.vm.provider "virtualbox" do |vb|

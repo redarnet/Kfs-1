@@ -59,6 +59,18 @@ size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer = (uint16_t*)VGA_MEMORY;
 
+// scroll a tester 
+void vga_scroll(void) {
+    for (int row = 1; row < VGA_HEIGHT; ++row)
+        for (int col = 0; col < VGA_WIDTH; ++col)
+            terminal_buffer[(row-1) * VGA_WIDTH + col] =
+					terminal_buffer[row * VGA_WIDTH + col];
+    // clear last line
+	uint16_t blank = vga_entry(' ', terminal_color);
+    for (int col = 0; col < VGA_WIDTH; ++col)
+        terminal_buffer[(VGA_HEIGHT-1) * VGA_WIDTH + col] = blank;
+}
+
 void terminal_initialize(void) 
 {
 	terminal_row = 0;
@@ -118,17 +130,9 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
-// scroll a tester 
-void vga_scroll(void) {
-    for (int row = 1; row < VGA_HEIGHT; ++row)
-        for (int col = 0; col < VGA_WIDTH; ++col)
-            terminal_buffer[(row-1) * VGA_WIDTH + col] =
-					terminal_buffer[row * VGA_WIDTH + col];
-    // clear last line
-	uint16_t blank = vga_entry(' ', terminal_color);
-    for (int col = 0; col < VGA_WIDTH; ++col)
-        terminal_buffer[(VGA_HEIGHT-1) * VGA_WIDTH + col] = blank;
-}
+
+// cursor
+// https://wiki.osdev.org/Text_Mode_Cursor
 
 void kernel_main(void) 
 {
@@ -138,8 +142,7 @@ void kernel_main(void)
 	terminal_writestring("42");
 	for (int i = 0; i < 30; i++)
 	{
-		if (i % 3  == 0)
-    		terminal_writestring("Hello 42\n");
+    	terminal_writestring("Hello 42\n");
 	}
 
 }
