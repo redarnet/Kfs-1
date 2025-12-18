@@ -4,7 +4,6 @@
 
 extern void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 
-/* ASCII art du "42" */
 static const char *big42[] = {
     "    #        ####### ",
     "  # #             ## ",
