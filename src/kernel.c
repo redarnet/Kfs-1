@@ -118,12 +118,6 @@ void terminal_putchar(char c)
         terminal_buffer[terminal_row * VGA_WIDTH + terminal_column] = blank;
     }
     else {
-			// terminal_putchar(' ');
-			cursor_update(terminal_row, terminal_column);
-		}
-		return;
-	}
-	else {
         terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
         terminal_column++;
     }
