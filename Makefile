@@ -3,7 +3,7 @@ CC      = $(CROSS)-gcc
 LD      = $(CROSS)-ld
 AS      = $(CC)
 
-CFLAGS  = -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fno-builtin
+CFLAGS  = -std=gnu99 -ffreestanding -O2 -Wall -Wextra -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs
 ASFLAGS = -c -ffreestanding
 LDFLAGS = -T src/linker.ld -nostdlib
 
