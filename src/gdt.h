@@ -5,6 +5,18 @@
 #include <stddef.h>
 
 
+#define GDT_ENTRIES 7
+#define LIMIT 0xFFFFF
+#define BASE 0x00000000
+#define KERNEL_CODE 0x9A
+#define KERNEL_DATA 0x92
+#define KERNEL_STACK 0x96
+#define USER_CODE 0xFA
+#define USER_DATA 0xF2
+#define USER_STACK 0xF6  
+//  user stack ??
+
+#define FLAGS 0xCF
 
 
 struct gdt_ptr {
@@ -23,4 +35,5 @@ struct gdt_entry {
     uint8_t  base_high;
 } __attribute__((packed));
 
+void gdt_init(void);
 #endif

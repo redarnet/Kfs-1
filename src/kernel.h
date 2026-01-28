@@ -46,6 +46,9 @@ size_t strlen(const char *str);
 void print_int(int n);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
+void kprintf(const char *fmt, ...);
+
 extern void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
+
 
 #endif

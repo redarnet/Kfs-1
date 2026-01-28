@@ -16,9 +16,11 @@ ISO        = kernel.iso
 
 OBJS = \
 	$(BUILD_DIR)/boot.o \
+	$(BUILD_DIR)/gdt_a.o \
 	$(BUILD_DIR)/kernel.o \
 	$(BUILD_DIR)/draw_42.o \
 	$(BUILD_DIR)/printk.o \
+	$(BUILD_DIR)/gdt.o \
 
 all: $(ISO)
 
@@ -28,6 +30,10 @@ $(KERNEL_BIN): $(OBJS)
 $(BUILD_DIR)/boot.o: $(SRC_DIR)/boot.s | $(BUILD_DIR)
 	$(AS) $(ASFLAGS) $< -o $@
 
+
+$(BUILD_DIR)/gdt_a.o: $(SRC_DIR)/gdt_a.s | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(BUILD_DIR)/kernel.o: $(SRC_DIR)/kernel.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -35,6 +41,9 @@ $(BUILD_DIR)/draw_42.o: $(SRC_DIR)/draw_42.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/printk.o: $(SRC_DIR)/printk.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/gdt.o: $(SRC_DIR)/gdt.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR):

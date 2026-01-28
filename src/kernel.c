@@ -1,4 +1,5 @@
 #include "kernel.h"
+#include "gdt.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -180,7 +181,14 @@ void keyboard_handle_input(void)
 void kernel_main(void) 
 {
 	terminal_initialize();
+    gdt_init();
 	draw_42(5);
+    kprintf("KFS2 boot OK\n");
+    kprintf("int=%d\n", 42);
+kprintf("hex=%x\n", 0xCAFEBABE);
+kprintf("char=%c\n", 'A');
+kprintf("str=%s\n", "hello");
+    // kprintf("GDT at %x\n", &gdt);
 	while (1)
         keyboard_handle_input();
 }
