@@ -1,6 +1,8 @@
 #include "gdt.h"
 #include "kernel.h"
 
+__attribute__((section(".gdt"))) 
+
 static struct gdt_entry gdt[GDT_ENTRIES];
 static struct gdt_ptr   gdtp;
 
@@ -44,6 +46,7 @@ void dump_gdt(int i)
 void gdt_init(void)
 {
     gdtp.limit = sizeof(gdt) - 1;
+    // gdtp.base  = (uint32_t)&gdt;
     gdtp.base  = (uint32_t)&gdt;
 
     // Descripteur nul/
@@ -65,6 +68,8 @@ void gdt_init(void)
     gdt_set_entry(4, BASE, LIMIT, USER_CODE, FLAGS);
     gdt_set_entry(5, BASE, LIMIT, USER_DATA, FLAGS);
     gdt_set_entry(6, BASE, LIMIT, USER_STACK, FLAGS);
+    // gdt_set_entry(1, BASE, LIMIT, 0x00, FLAGS); // P = 0
+
     kprintf("GDT initialized\n");
     kprintf("GDT pointer at %x\n", &gdtp);
     gdt_flush((uint32_t)&gdtp);
@@ -91,7 +96,5 @@ void gdt_init(void)
 
     // access = 1001 1010 = 0x9A
     // granularity = 1100 1111 = 0xCF
-
-
 
 }
