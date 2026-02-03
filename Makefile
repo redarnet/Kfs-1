@@ -46,6 +46,7 @@ $(BUILD_DIR)/printk.o: $(SRC_DIR)/printk.c | $(BUILD_DIR)
 
 $(BUILD_DIR)/gdt.o: $(SRC_DIR)/gdt.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
 $(BUILD_DIR)/printgdt.o: $(SRC_DIR)/printgdt.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

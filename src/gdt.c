@@ -45,5 +45,5 @@ void gdt_init(void)
     gdt_set_entry(5, BASE, LIMIT, USER_DATA, FLAGS);
     gdt_set_entry(6, BASE, LIMIT, USER_STACK, FLAGS);
     gdt_flush((uint32_t)&gdtp);
-    print_gdt(gdt, &gdtp);
+    // print_gdt(gdt, &gdtp);
 }

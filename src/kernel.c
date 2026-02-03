@@ -190,12 +190,12 @@ void keyboard_handle_input(void)
         terminal_putchar(c);
 }
 
-
 void kernel_main(void) 
 {
 	terminal_initialize();
 	draw_42(5);
     gdt_init();
+    // print_gdt(gdt, &gdtp);
 	while (1)
         keyboard_handle_input();
 }
