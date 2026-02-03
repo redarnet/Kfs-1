@@ -152,6 +152,19 @@ void terminal_initialize(void)
 	}
 }
 
+void terminal_clear(void) 
+{
+	for (size_t y = 0; y < VGA_HEIGHT; y++) {
+		for (size_t x = 0; x < VGA_WIDTH; x++) {
+			const size_t index = y * VGA_WIDTH + x;
+			terminal_buffer[index] = vga_entry(' ', terminal_color);
+		}
+	}
+	terminal_row = 0;
+	terminal_column = 0;
+	cursor_update(0, 0);
+}
+
 void terminal_setcolor(uint8_t color) 
 {
 	terminal_color = color;
@@ -181,14 +194,8 @@ void keyboard_handle_input(void)
 void kernel_main(void) 
 {
 	terminal_initialize();
-    gdt_init();
 	draw_42(5);
-    kprintf("KFS2 boot OK\n");
-    kprintf("int=%d\n", 42);
-kprintf("hex=%x\n", 0xCAFEBABE);
-kprintf("char=%c\n", 'A');
-kprintf("str=%s\n", "hello");
-    // kprintf("GDT at %x\n", &gdt);
+    gdt_init();
 	while (1)
         keyboard_handle_input();
 }

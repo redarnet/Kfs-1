@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "kernel.h"
+#define BIG42_HEIGHT 7
+#define BIG42_WIDTH  20
 
 extern void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 
@@ -13,9 +15,6 @@ static const char *big42[] = {
     "    #        ##      ",
     "    #        ####### ",
 };
-
-#define BIG42_HEIGHT 7
-#define BIG42_WIDTH  20
 
 void draw_42(uint8_t color)
 {

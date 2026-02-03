@@ -36,4 +36,9 @@ struct gdt_entry {
 } __attribute__((packed));
 
 void gdt_init(void);
+void print_gdt(struct gdt_entry *gdt, struct gdt_ptr *gdtp);
+
+extern struct gdt_entry *gdt;
+extern struct gdt_ptr gdtp;
+
 #endif

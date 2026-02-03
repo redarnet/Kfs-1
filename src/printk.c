@@ -25,6 +25,7 @@ void terminal_writestring(const char* data)
 {
 	terminal_write(data, strlen(data));
 }
+
 void print_hex(uint32_t n)
 {
     char hex[] = "0123456789abcdef";
@@ -35,26 +36,16 @@ void print_hex(uint32_t n)
         terminal_putchar(hex[(n >> i) & 0xF]);
 }
 
-#include "kernel.h"
-#include <stdarg.h>
-#include <stdint.h>
-
-void print_hex(uint32_t n);
-void print_int(int n);
-
 void kprintf(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-
     while (*fmt) {
         if (*fmt != '%') {
             terminal_putchar(*fmt++);
             continue;
         }
-
-        fmt++;  // saute %
-
+        fmt++;  
         switch (*fmt) {
             case 's':
                 terminal_writestring(va_arg(ap, char *));
@@ -83,6 +74,5 @@ void kprintf(const char *fmt, ...)
 
         fmt++;
     }
-
     va_end(ap);
 }
