@@ -24,8 +24,6 @@ struct gdt_ptr {
     uint32_t base;
 } __attribute__((packed));
 
-
-
 struct gdt_entry {
     uint16_t limit_low;
     uint16_t base_low;
