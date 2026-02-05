@@ -14,7 +14,6 @@
 #define USER_CODE 0xFA
 #define USER_DATA 0xF2
 #define USER_STACK 0xF6  
-//  user stack ??
 
 #define FLAGS 0xCF
 
